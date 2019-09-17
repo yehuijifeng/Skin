@@ -1,1 +1,1 @@
-include ':app'
+include ':app', ':app_skin',  ':skin_apk_2', ':skin_apk_1'
