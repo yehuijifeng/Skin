@@ -56,6 +56,13 @@ public class SkinResources {
     }
 
 
+    /**
+     * 查找资源的关键方法
+     * 通过当前包的资源id得到资源名和属性名，然后再皮肤包中查找对应的资源id并返回
+     *
+     * @param resId
+     * @return
+     */
     public int getIdentifier(int resId) {
         if (isDefaultSkin) {
             return resId;
@@ -118,6 +125,12 @@ public class SkinResources {
         }
     }
 
+    /**
+     * 获取字符串
+     *
+     * @param resId
+     * @return
+     */
     public String getString(int resId) {
         try {
             if (isDefaultSkin) {
@@ -134,19 +147,25 @@ public class SkinResources {
         return null;
     }
 
+    /**
+     * 获得皮肤的资源id
+     *
+     * @param resId
+     * @return
+     */
     public Typeface getTypeface(int resId) {
         String skinTypefacePath = getString(resId);
         if (TextUtils.isEmpty(skinTypefacePath)) {
             return Typeface.DEFAULT;
         }
         try {
-            //使用皮肤包
+            //使用默认皮肤
             if (isDefaultSkin) {
                 return Typeface.createFromAsset(mAppResources.getAssets(), skinTypefacePath);
             }
             return Typeface.createFromAsset(mSkinResources.getAssets(), skinTypefacePath);
         } catch (RuntimeException e) {
+            return Typeface.DEFAULT;
         }
-        return Typeface.DEFAULT;
     }
 }

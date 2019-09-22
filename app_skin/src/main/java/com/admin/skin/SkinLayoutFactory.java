@@ -1,6 +1,8 @@
 package com.admin.skin;
 
+import android.app.Activity;
 import android.content.Context;
+import android.graphics.Typeface;
 import android.util.AttributeSet;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,12 +21,12 @@ import java.util.Observer;
  * Describe:布局换肤的工厂类，用于采集需要换肤的view
  */
 public class SkinLayoutFactory implements LayoutInflater.Factory2, Observer {
-
+    private Activity activity;
     //系统原生view的路径，属于这些路径的才可以换肤，减少消耗和判断
     private static final String[] mClassPrefixList = {
+            "android.webkit.",
             "android.widget.",
             "android.view.",
-            "android.webkit.",
     };
 
     //获取view的class的构造方法的参数
@@ -37,11 +39,12 @@ public class SkinLayoutFactory implements LayoutInflater.Factory2, Observer {
     private SkinAttribute skinAttribute;
 
     //初始化的时候去创建SkinAttribute类
-    public SkinLayoutFactory() {
-        this.skinAttribute = new SkinAttribute();
+    public SkinLayoutFactory(Activity activity, Typeface typeface) {
+        this.activity = activity;
+        this.skinAttribute = new SkinAttribute(typeface);
     }
 
-    //在创建view的时候去采集view
+    //在创建view的时候去采集view，这里一个layout.xml文件中的所有view标签都会在创建的时候进入该方法
     @Nullable
     @Override
     public View onCreateView(@Nullable View parent, @NonNull String s, @NonNull Context context, @NonNull AttributeSet attributeSet) {
@@ -60,6 +63,7 @@ public class SkinLayoutFactory implements LayoutInflater.Factory2, Observer {
 
     /**
      * 创建原生view
+     *
      * @param name         标签名。例如：TextView;Button
      * @param context      上下文
      * @param attributeSet 标签参数
@@ -88,7 +92,7 @@ public class SkinLayoutFactory implements LayoutInflater.Factory2, Observer {
      * 创建一个view
      *
      * @param name         全类名
-     * @param context 上下文
+     * @param context      上下文
      * @param attributeSet 标签名
      * @return
      */
@@ -129,6 +133,9 @@ public class SkinLayoutFactory implements LayoutInflater.Factory2, Observer {
     //通知观察者，在这里接收到了消息
     @Override
     public void update(Observable o, Object arg) {
+        SkinThemeUtils.updateStatusBarColor(activity);
+        Typeface typeface=SkinThemeUtils.getSkinTypeface(activity);
+        skinAttribute.setTypeface(typeface);
         //更换皮肤
         skinAttribute.applySkin();
     }

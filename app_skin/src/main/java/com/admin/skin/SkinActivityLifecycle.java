@@ -2,6 +2,7 @@ package com.admin.skin;
 
 import android.app.Activity;
 import android.app.Application;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 
@@ -25,6 +26,11 @@ public class SkinActivityLifecycle implements Application.ActivityLifecycleCallb
     @Override
     public void onActivityCreated(@NonNull Activity activity, @Nullable Bundle bundle) {
         try {
+            //更改状态栏
+            SkinThemeUtils.updateStatusBarColor(activity);
+            //更新字体
+            Typeface typeface = SkinThemeUtils.getSkinTypeface(activity);
+
             //activity在创建的时候拿到布局加载器
             LayoutInflater layoutInflater = LayoutInflater.from(activity);
 
@@ -39,7 +45,7 @@ public class SkinActivityLifecycle implements Application.ActivityLifecycleCallb
             mFactorysets.setBoolean(layoutInflater, false);
 
             //创建一个皮肤工厂
-            SkinLayoutFactory skinLayoutFactory = new SkinLayoutFactory();
+            SkinLayoutFactory skinLayoutFactory = new SkinLayoutFactory(activity,typeface);
             //给当前activity的布局加载器添加这个工厂
             LayoutInflaterCompat.setFactory2(layoutInflater, skinLayoutFactory);
             //添加观察者

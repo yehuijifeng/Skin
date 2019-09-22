@@ -1,5 +1,6 @@
 package com.admin.skin;
 
+import android.graphics.Typeface;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.AttributeSet;
@@ -25,6 +26,9 @@ public class SkinAttribute {
     //需要换肤的view
     private List<SkinView> skinViews = new ArrayList<>();
 
+    //需要更换的字体
+    private Typeface typeface;
+
     //以下这些事需要换肤的属性
     static {
         mAttribute.add("background");
@@ -34,6 +38,11 @@ public class SkinAttribute {
         mAttribute.add("drawableRight");
         mAttribute.add("drawableTop");
         mAttribute.add("drawableBottom");
+        mAttribute.add("skinTypeface");
+    }
+
+    public SkinAttribute(Typeface typeface) {
+        this.typeface = typeface;
     }
 
     /**
@@ -50,7 +59,7 @@ public class SkinAttribute {
             String attributeName = attributeSet.getAttributeName(i);
             //如果当前属性名字是需要修改的属性则去处理
             if (mAttribute.contains(attributeName)) {
-                //拿到属性值
+                //拿到属性值，@2130968664
                 String attributeValue = attributeSet.getAttributeValue(i);
                 //写死的色值，不需要修改
                 if (attributeValue.startsWith("#")) {
@@ -78,8 +87,9 @@ public class SkinAttribute {
             }
         }
         //如果当前view检查出来了需要替换的资源id，则保存起来
-        if (!skinPains.isEmpty()) {
+        if (!skinPains.isEmpty() || view instanceof TextView) {
             SkinView skinView = new SkinView(view, skinPains);
+            skinView.applySkin(typeface);
             skinViews.add(skinView);
         }
     }
@@ -87,8 +97,13 @@ public class SkinAttribute {
     //保存的所有的view进行替换皮肤
     public void applySkin() {
         for (SkinView skinView : skinViews) {
-            skinView.appSkin();
+            skinView.applySkin(typeface);
         }
+    }
+
+    //设置字体
+    public void setTypeface(Typeface typeface) {
+        this.typeface = typeface;
     }
 
     //保存view与之对应的SkinPain对象
@@ -100,8 +115,10 @@ public class SkinAttribute {
             this.view = view;
             this.skinPains = skinPains;
         }
+
         //替换皮肤资源
-        public void appSkin() {
+        public void applySkin(Typeface typeface) {
+            applyTypeface(typeface);
             for (SkinPain skinPain : skinPains) {
                 Drawable left = null, right = null, top = null, bottom = null;
                 switch (skinPain.attrubuteName) {
@@ -116,11 +133,13 @@ public class SkinAttribute {
                         break;
                     case "src":
                         background = SkinResources.getInstance().getBackground(skinPain.resId);
-                        if (background instanceof Integer) {
-                            ((ImageView) view).setImageDrawable(new ColorDrawable((Integer)
-                                    background));
-                        } else {
-                            ((ImageView) view).setImageDrawable((Drawable) background);
+                        if (view instanceof ImageView) {
+                            ImageView imageView = ((ImageView) view);
+                            if (background instanceof Integer) {
+                                imageView.setImageDrawable(new ColorDrawable((Integer) background));
+                            } else if (background instanceof Drawable) {
+                                imageView.setImageDrawable((Drawable) background);
+                            }
                         }
                         break;
                     case "textColor":
@@ -128,6 +147,7 @@ public class SkinAttribute {
                         break;
                     case "drawableLeft":
                         left = SkinResources.getInstance().getDrawable(skinPain.resId);
+                        ((TextView) view).setCompoundDrawables(left, top, right, bottom);
                         break;
                     case "drawableTop":
                         top = SkinResources.getInstance().getDrawable(skinPain.resId);
@@ -138,12 +158,21 @@ public class SkinAttribute {
                     case "drawableBottom":
                         bottom = SkinResources.getInstance().getDrawable(skinPain.resId);
                         break;
+                    case "skinTypeface":
+                        applyTypeface(SkinResources.getInstance().getTypeface(skinPain.resId));
+                        break;
                     default:
                         break;
                 }
             }
         }
 
+        //替换字体
+        private void applyTypeface(Typeface typeface) {
+            if (view instanceof TextView) {
+                ((TextView) view).setTypeface(typeface);
+            }
+        }
     }
 
     public class SkinPain {

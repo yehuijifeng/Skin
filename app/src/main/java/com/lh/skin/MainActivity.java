@@ -35,8 +35,13 @@ public class MainActivity extends AppCompatActivity {
             String[] shenqingPERMISSIONS = lacksPermissions(this, PERMISSIONS);
             if (shenqingPERMISSIONS != null) {
                 ActivityCompat.requestPermissions(this, shenqingPERMISSIONS, 123);
+            }else{
+//                SkinManager.getInstance().loadSkin(SkinPreference.getInstance().getSkin());
             }
+        }else{
+//            SkinManager.getInstance().loadSkin(SkinPreference.getInstance().getSkin());
         }
+
     }
     /**
      * 判断android6.0以后是否获取了动态权限
@@ -66,7 +71,7 @@ public class MainActivity extends AppCompatActivity {
     //换肤
     public void change(View view) {
         //拿到sd卡中的皮肤包
-        String path = Environment.getExternalStorageDirectory() + File.separator + "skin_app_1.apk";
+        String path = Environment.getExternalStorageDirectory() + File.separator + "skin_apk_1.apk";
         SkinManager.getInstance().loadSkin(path);
     }
 }

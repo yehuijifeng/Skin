@@ -5,7 +5,6 @@ import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.content.res.Resources;
-import android.os.Build;
 import android.text.TextUtils;
 import android.widget.Toast;
 
@@ -42,8 +41,6 @@ public class SkinManager extends Observable {
         SkinResources.init(application);
         //注册activity的生命周期回调监听
         application.registerActivityLifecycleCallbacks(new SkinActivityLifecycle());
-        //加载皮肤，这里使用存储的用户选择的皮肤，如果没有则传递null，即使用默认皮肤
-        loadSkin(SkinPreference.getInstance().getSkin());
     }
 
     /**
@@ -64,9 +61,9 @@ public class SkinManager extends Observable {
                     Toast.makeText(application, "文件不存在", Toast.LENGTH_LONG).show();
                     return;
                 }
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
                     //android 9 以上无法再反射部分方法，这里使用hook
-                } else {
+//                } else {
 
                     //反射创建AssetManager
                     AssetManager assetManager = AssetManager.class.newInstance();
@@ -96,7 +93,7 @@ public class SkinManager extends Observable {
                     String packageName = info.packageName;
                     //设置皮肤包的包名和Resource对象
                     SkinResources.getInstance().applySkin(skinResource, packageName);
-                }
+//                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

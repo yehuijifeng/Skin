@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">Skin</string>
+    <string name="typeface">font/wryh.ttf</string>
+    <string name="typeface_2">font/hwxk.ttf</string>
 </resources>
