@@ -16,7 +16,7 @@ public class SkinThemeUtils {
     private static int[] a = {R.attr.colorPrimaryDark};
     //状态栏和navigationBar
     private static int[] b = {android.R.attr.statusBarColor, android.R.attr.navigationBarColor};
-    //字体默认颜色
+    //默认字体
     private static int[] c = {R.attr.skinTypeface};
 
     /**

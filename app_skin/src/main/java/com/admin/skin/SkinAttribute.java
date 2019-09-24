@@ -87,7 +87,7 @@ public class SkinAttribute {
             }
         }
         //如果当前view检查出来了需要替换的资源id，则保存起来
-        if (!skinPains.isEmpty() || view instanceof TextView) {
+        if (!skinPains.isEmpty() || view instanceof TextView || view instanceof SkinViewSupport) {
             SkinView skinView = new SkinView(view, skinPains);
             skinView.applySkin(typeface);
             skinViews.add(skinView);
@@ -119,6 +119,7 @@ public class SkinAttribute {
         //替换皮肤资源
         public void applySkin(Typeface typeface) {
             applyTypeface(typeface);
+            applySkinSupport();
             for (SkinPain skinPain : skinPains) {
                 Drawable left = null, right = null, top = null, bottom = null;
                 switch (skinPain.attrubuteName) {
@@ -164,6 +165,13 @@ public class SkinAttribute {
                     default:
                         break;
                 }
+            }
+        }
+
+        //替换自定义view皮肤
+        private void applySkinSupport() {
+            if (view instanceof SkinViewSupport) {
+                ((SkinViewSupport) view).applySkin();
             }
         }
 

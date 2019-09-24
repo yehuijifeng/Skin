@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -12,15 +13,26 @@
         android:onClick="change"
         android:text="换肤" />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:onClick="setNight"
+        android:text="夜间/日间模式" />
+
     <TextView
+        skinTypeface="@string/typeface_2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:background="@color/text_back_1"
-        skinTypeface="@string/typeface_2"
         android:text="换肤测试1"
         android:textColor="@color/text_color_1"
         android:textSize="20sp" />
+
+    <com.admin.skin.CircleView
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        app:circleTextColor="@color/text_back_1" />
 
     <TextView
         android:layout_width="wrap_content"
